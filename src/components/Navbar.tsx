@@ -3,6 +3,10 @@ import { Menu, X, MessageCircle } from 'lucide-react';
 import { COMPANY_INFO } from '../constants';
 import { motion, AnimatePresence } from 'motion/react';
 
+// BELANGRIJK: Importeer je logo hier. 
+// Dit zorgt ervoor dat Cloudflare/GitHub het bestand altijd kan vinden.
+import logoImg from '/assets/LogoCT.png';
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -13,23 +17,21 @@ export function Navbar() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // 1. Bepaal of we een achtergrondkleur nodig hebben
+      // 1. Achtergrondkleur logica
       if (currentScrollY > 20) {
         setScrolled(true);
       } else {
         setScrolled(false);
       }
 
-      // 2. Bepaal of de header zichtbaar moet zijn (Smart Header logica)
-      // Altijd tonen bovenaan de pagina of als het mobiele menu open is
+      // 2. Smart Header logica (verbergen bij omlaag, tonen bij omhoog)
       if (currentScrollY < 10 || isOpen) {
         setIsVisible(true);
       } 
-      // Verbergen bij naar beneden scrollen, tonen bij naar boven scrollen
       else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false); // Scroll naar beneden -> weg
+        setIsVisible(false); 
       } else {
-        setIsVisible(true);  // Scroll naar boven -> terug
+        setIsVisible(true);  
       }
 
       setLastScrollY(currentScrollY);
@@ -50,7 +52,6 @@ export function Navbar() {
   return (
     <nav 
       className={`fixed w-full z-50 transition-all duration-500 ease-in-out ${
-        // De 'translate-y' zorgt voor het in/uit beeld glijden
         isVisible ? 'translate-y-0' : '-translate-y-full'
       } ${
         (scrolled || isOpen) 
@@ -61,11 +62,11 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20 md:h-24">
           
-          {/* Logo Sectie - Groot en vast formaat */}
+          {/* Logo Sectie - Gebruikt nu de geïmporteerde 'logoImg' */}
           <div className="flex-shrink-0 flex items-center">
             <a href="#" className="relative z-50">
               <img 
-                src="../assets/LogoCT.png" 
+                src={logoImg} 
                 alt="Clean Trust Logo" 
                 className="h-24 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-105"
               />

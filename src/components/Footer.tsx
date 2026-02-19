@@ -1,6 +1,9 @@
 import React from 'react';
 import { COMPANY_INFO } from '../constants';
 
+// BELANGRIJK: Importeer hier ook het logo voor een betrouwbare weergave op Cloudflare/GitHub
+import footerLogo from '/assets/LogoCT.png';
+
 export function Footer() {
   return (
     <footer className="bg-olive-900 text-olive-100 py-12 border-t border-olive-800">
@@ -11,9 +14,9 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img 
-                src="../assets/LogoCT.png" 
+                src={footerLogo} // Gebruikt de geïmporteerde variabele
                 alt="Clean Trust Logo" 
-                className="h-20 w-auto object-contain" // h-20 zorgt voor een mooi formaat in de footer
+                className="h-20 w-auto object-contain" 
               />
             </div>
             <p className="text-olive-300 text-sm max-w-xs leading-relaxed">
