@@ -6,14 +6,38 @@ import { motion, AnimatePresence } from 'motion/react';
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+
+      // 1. Bepaal of we een achtergrondkleur nodig hebben
+      if (currentScrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+
+      // 2. Bepaal of de header zichtbaar moet zijn (Smart Header logica)
+      // Altijd tonen bovenaan de pagina of als het mobiele menu open is
+      if (currentScrollY < 10 || isOpen) {
+        setIsVisible(true);
+      } 
+      // Verbergen bij naar beneden scrollen, tonen bij naar boven scrollen
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false); // Scroll naar beneden -> weg
+      } else {
+        setIsVisible(true);  // Scroll naar boven -> terug
+      }
+
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY, isOpen]);
 
   const navLinks = [
     { name: 'Diensten', href: '#diensten' },
@@ -25,23 +49,27 @@ export function Navbar() {
 
   return (
     <nav 
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/95 backdrop-blur-md border-b border-olive-100 py-2 shadow-sm' 
-          : 'bg-transparent py-6'
+      className={`fixed w-full z-50 transition-all duration-500 ease-in-out ${
+        // De 'translate-y' zorgt voor het in/uit beeld glijden
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } ${
+        (scrolled || isOpen) 
+          ? 'bg-white/95 backdrop-blur-md border-b border-olive-100 py-1 shadow-sm' 
+          : 'bg-transparent py-2'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center gap-2">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${scrolled ? 'bg-olive-700 text-white' : 'bg-white text-olive-900'}`}>
-              <span className="font-heading font-bold text-xl">C</span>
-            </div>
-            <div className="flex flex-col">
-              <span className={`font-heading text-xl font-bold tracking-wide transition-colors ${scrolled ? 'text-olive-900' : 'text-white'}`}>CLEAN TRUST</span>
-              <span className={`text-[10px] uppercase tracking-[0.2em] transition-colors ${scrolled ? 'text-olive-600' : 'text-white/80'}`}>Schoon. Rust. Focus.</span>
-            </div>
+        <div className="flex justify-between items-center h-20 md:h-24">
+          
+          {/* Logo Sectie - Groot en vast formaat */}
+          <div className="flex-shrink-0 flex items-center">
+            <a href="#" className="relative z-50">
+              <img 
+                src="../assets/LogoCT.png" 
+                alt="Clean Trust Logo" 
+                className="h-24 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </a>
           </div>
 
           {/* Desktop Menu */}
@@ -51,7 +79,7 @@ export function Navbar() {
                 key={link.name}
                 href={link.href}
                 className={`font-medium text-sm uppercase tracking-wider transition-colors hover:text-olive-400 ${
-                  scrolled ? 'text-olive-800' : 'text-white'
+                  (scrolled || isOpen) ? 'text-olive-800' : 'text-white'
                 }`}
               >
                 {link.name}
@@ -62,7 +90,7 @@ export function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               className={`px-6 py-2.5 rounded-full transition-all flex items-center gap-2 text-sm font-bold shadow-lg hover:scale-105 ${
-                scrolled 
+                (scrolled || isOpen) 
                   ? 'bg-olive-700 text-white hover:bg-olive-800' 
                   : 'bg-white text-olive-900 hover:bg-olive-50'
               }`}
@@ -76,30 +104,30 @@ export function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 transition-colors ${scrolled ? 'text-olive-800' : 'text-white'}`}
+              className={`p-2 transition-colors ${ (scrolled || isOpen) ? 'text-olive-800' : 'text-white'}`}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <X size={32} /> : <Menu size={32} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-olive-100 overflow-hidden shadow-xl"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-full left-0 w-full bg-white border-t border-olive-100 overflow-hidden shadow-2xl md:hidden"
           >
-            <div className="px-4 pt-2 pb-6 space-y-2">
+            <div className="px-6 pt-4 pb-8 space-y-4">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-3 text-olive-800 hover:bg-olive-50 rounded-lg font-medium"
+                  className="block py-4 text-xl text-olive-800 border-b border-olive-50 font-medium"
                 >
                   {link.name}
                 </a>
@@ -108,9 +136,9 @@ export function Navbar() {
                 href={`https://wa.me/${COMPANY_INFO.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block px-3 py-3 text-olive-700 font-medium flex items-center gap-2"
+                className="mt-6 flex items-center justify-center gap-3 w-full py-4 bg-olive-700 text-white rounded-xl font-bold"
               >
-                <MessageCircle size={18} />
+                <MessageCircle size={24} />
                 WhatsApp Direct
               </a>
             </div>
