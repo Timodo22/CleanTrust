@@ -33,8 +33,8 @@ const UNIQUE_POINTS = [
   },
   {
     icon: Leaf,
-    title: "Biologisch",
-    description: "Voor een schone én veilige omgeving werken wij met biologische producten."
+    title: "Ecologisch",
+    description: "Voor een schone én veilige omgeving werken wij met ecologisch producten."
   },
   {
     icon: ListChecks,
