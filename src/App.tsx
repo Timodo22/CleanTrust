@@ -1,13 +1,9 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Services } from './components/Services';
 import { Projects } from './components/Projects';
+import { WhyUs } from './components/WhyUs'; // Verwijs naar het nieuwe bestand
 import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
@@ -21,6 +17,7 @@ export default function App() {
         <Hero />
         <Services />
         <Projects />
+        <WhyUs /> {/* De nieuwe 'Wat ons uniek maakt' sectie */}
         <About />
         <Contact />
       </main>
@@ -29,4 +26,3 @@ export default function App() {
     </div>
   );
 }
-
