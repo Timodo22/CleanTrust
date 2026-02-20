@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
+import NaDak from '/assets/NaDak.jpeg';
+import VoorDak from '/assets/VoorDak.jpeg';
+import NaDak1 from '/assets/NaDak1.jpeg';
+import VoorDak1 from '/assets/VoorDak1.jpeg';
 
 const PROJECTS = [
   {
     id: 1,
-    title: "Kantoorpand Eindhoven",
-    category: "Dieptereiniging",
-    before: "https://images.unsplash.com/photo-1584622050111-993a426fbf0a?auto=format&fit=crop&q=80&w=800", // Placeholder
-    after: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", // Placeholder
-    description: "Volledige reiniging van 500m2 kantoorruimte inclusief vloeronderhoud."
+    title: "Dak reiniging in Apeldoorn",
+    category: "Dak reiniging",
+    before: [VoorDak], // Placeholder
+    after: [NaDak], // Placeholder
+    description: "Volledige dak reiniging in Apeldoorn."
   },
   {
     id: 2,
-    title: "Gevelreiniging Weert",
-    category: "Exterieur",
-    before: "https://images.unsplash.com/photo-1632923956387-2b36e3923306?auto=format&fit=crop&q=80&w=800", // Placeholder
-    after: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800", // Placeholder
-    description: "Verwijderen van groene aanslag en impregneren van de gevel."
+    title: "Dak reiniging + herstellen",
+    category: "Dak reinigng",
+    before: [VoorDak1], // Placeholder
+    after: [NaDak1], // Placeholder
+    description: "Verwijderen van aanslag en opnieuw spuiten van de pannen."
   }
 ];
 

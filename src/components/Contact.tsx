@@ -6,14 +6,41 @@ import { motion } from 'motion/react';
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setSubmitted(true);
+    setErrorMessage("");
+
+    // Verzamel alle data uit het formulier
+    const formData = new FormData(e.currentTarget);
+    
+    // --- BELANGRIJK: VUL HIER JE WEB3FORMS ACCESS KEY IN ---
+    formData.append("access_key", "bde54898-3ca0-4f8b-8b0a-2f24fe92b879");
+    
+    // Instellingen voor een mooie weergave in de mailbox van CleanTrust
+    formData.append("subject", "Nieuwe contactaanvraag via de Clean Trust website 🌟");
+    formData.append("from_name", "Clean Trust Website");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage("Er ging iets mis bij het versturen. Probeer het later opnieuw of neem telefonisch contact op.");
+      }
+    } catch (error) {
+      setErrorMessage("Kan geen verbinding maken. Controleer uw internetverbinding en probeer het opnieuw.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -38,14 +65,14 @@ export function Contact() {
                 <div>
                   <h4 className="font-bold text-olive-900 mb-1">Telefoon & WhatsApp</h4>
                   <p className="text-olive-700 mb-2">Bereikbaar voor al uw vragen</p>
-                  <a href={`tel:${COMPANY_INFO.phone}`} className="text-olive-900 font-bold hover:text-olive-600 block">
+                  <a href={`tel:${COMPANY_INFO.phone}`} className="text-olive-900 font-bold hover:text-olive-600 block transition-colors">
                     {COMPANY_INFO.phone}
                   </a>
                   <a 
                     href={`https://wa.me/${COMPANY_INFO.whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-green-600 font-medium mt-2 hover:underline"
+                    className="inline-flex items-center gap-2 text-green-600 font-medium mt-2 hover:text-green-700 hover:underline transition-all"
                   >
                     <MessageCircle size={16} />
                     Stuur een WhatsApp bericht
@@ -71,7 +98,7 @@ export function Contact() {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-olive-100">
+          <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-olive-100 relative">
             {submitted ? (
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -82,10 +109,10 @@ export function Contact() {
                   <Send size={32} />
                 </div>
                 <h3 className="text-2xl font-bold text-olive-900 mb-4">Bedankt voor uw bericht!</h3>
-                <p className="text-olive-600">Wij nemen zo spoedig mogelijk contact met u op.</p>
+                <p className="text-olive-600">Wij hebben uw aanvraag in goede orde ontvangen en nemen zo spoedig mogelijk contact met u op.</p>
                 <button 
                   onClick={() => setSubmitted(false)}
-                  className="mt-8 text-olive-600 font-medium hover:text-olive-800 underline"
+                  className="mt-8 text-olive-600 font-medium hover:text-olive-800 underline transition-colors"
                 >
                   Nog een bericht sturen
                 </button>
@@ -94,14 +121,24 @@ export function Contact() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <h3 className="text-xl font-bold text-olive-900 mb-6">Stuur ons een bericht</h3>
                 
+                {/* Honeypot om spam bots te vangen (onzichtbaar voor gebruikers) */}
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+
+                {errorMessage && (
+                  <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">
+                    {errorMessage}
+                  </div>
+                )}
+                
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="text-sm font-medium text-olive-700">Naam</label>
                     <input 
                       type="text" 
                       id="name" 
+                      name="Naam" // Bepaalt de weergave in de mail!
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-0 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-2 focus:ring-olive-200 transition-all outline-none"
                       placeholder="Uw naam"
                     />
                   </div>
@@ -110,7 +147,8 @@ export function Contact() {
                     <input 
                       type="text" 
                       id="company" 
-                      className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-0 transition-all"
+                      name="Bedrijfsnaam"
+                      className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-2 focus:ring-olive-200 transition-all outline-none"
                       placeholder="Bedrijfsnaam"
                     />
                   </div>
@@ -121,8 +159,9 @@ export function Contact() {
                   <input 
                     type="email" 
                     id="email" 
+                    name="E-mailadres"
                     required
-                    className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-0 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-2 focus:ring-olive-200 transition-all outline-none"
                     placeholder="naam@bedrijf.nl"
                   />
                 </div>
@@ -132,7 +171,8 @@ export function Contact() {
                   <input 
                     type="tel" 
                     id="phone" 
-                    className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-0 transition-all"
+                    name="Telefoonnummer"
+                    className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-2 focus:ring-olive-200 transition-all outline-none"
                     placeholder="06 12345678"
                   />
                 </div>
@@ -141,9 +181,10 @@ export function Contact() {
                   <label htmlFor="message" className="text-sm font-medium text-olive-700">Uw bericht</label>
                   <textarea 
                     id="message" 
+                    name="Bericht"
                     rows={4}
                     required
-                    className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-0 transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl bg-olive-50 border-transparent focus:border-olive-500 focus:bg-white focus:ring-2 focus:ring-olive-200 transition-all resize-none outline-none"
                     placeholder="Waarmee kunnen we u helpen?"
                   ></textarea>
                 </div>
@@ -151,7 +192,7 @@ export function Contact() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-olive-700 text-white rounded-xl font-bold hover:bg-olive-800 transition-all shadow-lg hover:shadow-olive-700/20 flex items-center justify-center gap-2 disabled:opacity-70"
+                  className="w-full py-4 bg-olive-700 text-white rounded-xl font-bold hover:bg-olive-800 transition-all shadow-lg hover:shadow-olive-700/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
