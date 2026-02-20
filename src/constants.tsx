@@ -32,7 +32,7 @@ export const SERVICES = [
     title: "Algemene ruimtes",
     icon: Sparkles,
     description: "Schoonmaak van entrees, gangen, trappenhuizen en liften.",
-    details: ["Trappenhuizen", "Liften & hallen", "Postbussen", "Ramen zemen"]
+    details: ["Trappenhuizen", "Liften & hallen", "Postbussen", "Ramen zemen", "kamer panden"]
   },
   {
     title: "Sanitair",

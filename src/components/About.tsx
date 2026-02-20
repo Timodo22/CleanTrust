@@ -18,7 +18,7 @@ const TEAM_MEMBERS = [
     description: "Schoonmaak kan anders: persoonlijker, betrouwbaarder en duurzamer. Dat is de visie waarmee ik Clean Trust stuur en waar ik elke dag voor sta."
   },
   {
-    name: "Troy",
+    name: "Troy Dubach",
     role: "Planning",
     image: TroyImage,
     phone: "+31 6 48391378",
