@@ -11,7 +11,7 @@ import HopeImage from '/assets/Hope.jpeg';
 const TEAM_MEMBERS = [
   {
     name: "Hope Dubach",
-    role: "Eigenaar & Planning",
+    role: "Eigenaar & Specialist",
     image: HopeImage,
     phone: "+31 6 18700528",
     phoneLink: "tel:+31618700528",
@@ -19,7 +19,7 @@ const TEAM_MEMBERS = [
   },
   {
     name: "Troy",
-    role: "Specialist",
+    role: "Planning",
     image: TroyImage,
     phone: "+31 6 48391378",
     phoneLink: "tel:+31648391378",

@@ -52,10 +52,23 @@ export function Footer() {
           </div>
         </div>
         
-        {/* Copyright balk */}
-        <div className="border-t border-olive-800 pt-8 text-center text-xs text-olive-400">
+        {/* Copyright balk met Spectux credits */}
+        <div className="border-t border-olive-800 pt-8 text-center text-xs text-olive-400 flex flex-col sm:flex-row justify-center items-center gap-2">
           <p>&copy; {new Date().getFullYear()} {COMPANY_INFO.name}. Alle rechten voorbehouden.</p>
+          <span className="hidden sm:inline text-olive-600">|</span>
+          <p>
+            Powered by{' '}
+            <a 
+              href="https://spectux.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-olive-300 hover:text-white hover:underline transition-all font-medium"
+            >
+              Spectux
+            </a>
+          </p>
         </div>
+        
       </div>
     </footer>
   );
