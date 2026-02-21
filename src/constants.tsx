@@ -3,8 +3,8 @@ import { Leaf, Shield, Clock, MapPin, Sparkles, Droplets, Building2, Stethoscope
 export const COMPANY_INFO = {
   name: "Clean Trust",
   tagline: "Schoon. Rust. Focus.",
-  phone: "+31 6 48391378",
-  whatsapp: "31648391378", // International format for link
+  phone: "+31 6 18700528",
+  whatsapp: "31618700528", // International format for link
   email: "info@cleantrust.nl", // Placeholder, user didn't provide email but good to have
   startDate: "1 maart",
 };

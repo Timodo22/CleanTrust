@@ -21,8 +21,7 @@ const TEAM_MEMBERS = [
     name: "Troy Dubach",
     role: "Planning",
     image: TroyImage,
-    phone: "+31 6 48391378",
-    phoneLink: "tel:+31648391378",
+    // Telefoonnummer en link verwijderd
     description: "Kwaliteit zit in de details. Als specialist zorg ik ervoor dat elke klus met de grootste zorg en perfectie wordt uitgevoerd, precies zoals afgesproken."
   }
 ];
@@ -76,13 +75,16 @@ export function About() {
                       <h4 className="font-heading text-2xl font-bold text-olive-900">{member.name}</h4>
                       <p className="text-olive-600 font-medium text-sm uppercase tracking-wider mb-3 sm:mb-0">{member.role}</p>
                     </div>
-                    <a 
-                      href={member.phoneLink}
-                      className="flex items-center gap-2 bg-olive-50 hover:bg-olive-100 text-olive-800 px-3 py-2 rounded-lg transition-colors text-sm font-semibold border border-olive-200"
-                    >
-                      <Phone size={16} className="text-olive-600" />
-                      {member.phone}
-                    </a>
+                    {/* Alleen renderen als er een phoneLink is */}
+                    {member.phoneLink && member.phone && (
+                      <a 
+                        href={member.phoneLink}
+                        className="flex items-center gap-2 bg-olive-50 hover:bg-olive-100 text-olive-800 px-3 py-2 rounded-lg transition-colors text-sm font-semibold border border-olive-200"
+                      >
+                        <Phone size={16} className="text-olive-600" />
+                        {member.phone}
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
